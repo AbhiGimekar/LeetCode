@@ -3,7 +3,7 @@ public:
     vector<list<pair<int,int>>> mp;
     int size ;
     MyHashMap() {
-        size = 10000;
+        size = 1000;
         mp.resize(size);
     }
     
