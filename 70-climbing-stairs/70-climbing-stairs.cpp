@@ -1,20 +1,22 @@
 class Solution {
 public:
-    unordered_map<int,int> mp;
     
     int climbStairs(int n) {
         
-        if(mp.find(n) != mp.end()) return mp[n];
+        if(n<=2)
+            return n;
         
-         int result = 0;
+        int one = 2;
+        int two = 1;
+        int total = 0;
         
-         if (n == 0) result = 0;
-         else if (n == 1) result= 1; 
-         else if (n == 2) result = 2; 
-         else result = climbStairs(n-1) + climbStairs(n-2); 
-         
-         mp[n]=result;
+        for(int i=2 ; i<n ; i++)
+        {
+            total = one + two;
+            two = one;
+            one = total;
+        }
         
-         return result;
+        return  total;
     }
 };
