@@ -12,43 +12,29 @@
 class Solution {
 public:
     int deepestLeavesSum(TreeNode* root) {
-        if(root==NULL )
-            return 0;
         
-        vector<vector<int>> ans;
+        queue<TreeNode*> fillValues;
+        fillValues.push(root);
         
-        queue<TreeNode*> q;
-        q.push(root);
-        
-        while(!q.empty()){
-            int size = q.size();
-            vector<int>level;
+        int deepestLeafSum = 0;
+        while(!fillValues.empty()){
+            int size = fillValues.size(), sum = 0;
             
-            for(int i=0 ; i<size ; i++){
-                auto node = q.front();
-                q.pop();
-                if(node->left != NULL)
-                    q.push(node->left);
-                if(node->right!=NULL)
-                    q.push(node->right);
-                level.push_back(node->val);
+            for(int i = 0; i < size; i++){
+                TreeNode *node = fillValues.front();
+                fillValues.pop();
+                
+                sum += node->val;
+                if(node->left  != nullptr) 
+                    fillValues.push(node->left);
+                
+                if(node->right != nullptr) 
+                    fillValues.push(node->right);
             }
-            ans.push_back(level);
+            
+            deepestLeafSum = sum;
         }
         
-        // for(auto i:ans){
-        //     for(auto v:i)
-        //         cout<<v<<" ";
-        //     cout<<endl;
-        // }
-        int x = ans.size();
-        int y = ans[x-1].size();
-        
-        int sum=0;
-        for(int i=0 ;i<y ; i++)
-            sum+=ans[x-1][i];
-        
-        return sum;
-        
+        return deepestLeafSum;
     }
 };
