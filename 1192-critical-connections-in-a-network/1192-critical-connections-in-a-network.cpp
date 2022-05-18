@@ -8,7 +8,7 @@ public:
             edgeMap[conn[0]].push_back(conn[1]);
             edgeMap[conn[1]].push_back(conn[0]);
         }
-        dfs(0, 0);
+        dfs(0,-1);
         return ans;
         
     }
