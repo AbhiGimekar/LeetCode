@@ -1,34 +1,24 @@
 class Solution {
 public:
     bool checkValid(vector<vector<int>>& matrix) {
-        
-        int sum=0;
-        int n = matrix.size() ;
-        
-        for(int i=0 ; i<n ; i++)
-        {   
-            set<int> s;
-            for(int j=0 ; j<n ; j++)
+        int n=matrix.size();
+        unordered_set<int> s1, s2;
+        for(int i=0;i<n;i++)
+        {
+            for(int j=0;j<n;j++)
             {
-                s.insert(matrix[i][j]);
+                if(s1.find(matrix[i][j])!=s1.end())
+                    return false;
+                else
+                    s1.insert(matrix[i][j]);
+                if(s2.find(matrix[j][i])!=s2.end())
+                    return false;
+                else
+                    s2.insert(matrix[j][i]);
             }
-            
-            if(s.size() != n)
-                 return false;
+            s1.clear();
+            s2.clear();
         }
-        
-        for(int i=0 ; i<n ; i++)
-        {   
-            set<int> s;
-            for(int j=0 ; j<n ; j++)
-            {
-                s.insert(matrix[j][i]);
-            }
-            
-            if(s.size() != n)
-                 return false;
-        }
-        
         return true;
     }
 };
