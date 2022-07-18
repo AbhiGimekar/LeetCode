@@ -1,33 +1,24 @@
 class Solution {
 public:
-    int result=0,target;
-    unordered_map<int,int> map;
-    void get_result(vector<int>& nums)                          //Get number of subarrays that sum to target.
-    {
-        int sum=0;
-        map.clear();
-        map[0]++;
-        for(int &i:nums)
-        {
-            sum+=i;
-            result+=map[sum-target];       //get number of subarrays who's sum equals target and end at i and add result to global result.
-            map[sum]++;                    //Add the occurence of running sum to map.
-        }
-    }
-    int numSubmatrixSumTarget(vector<vector<int>>& matrix, int target) 
-    {
-        this->target=target;
-        vector<int> row(matrix[0].size());
-        for(int i=0;i<matrix.size();i++)                    //Convert 2D array to 1D by row.
-        {
-            fill(row.begin(),row.end(),0);                  //Clear vector to start the row with i as starting row.
-            for(int j=i;j<matrix.size();j++)
-            {
-                for(int x=0;x<matrix[0].size();x++)         //Add next row
-                    row[x]+=matrix[j][x];
-                get_result(row);
+
+    int numSubmatrixSumTarget(vector<vector<int>>& A, int target) {
+        int res = 0, m = A.size(), n = A[0].size();
+        for (int i = 0; i < m; i++)
+            for (int j = 1; j < n; j++)
+                A[i][j] += A[i][j - 1];
+
+        unordered_map<int, int> counter;
+        for (int i = 0; i < n; i++) {
+            for (int j = i; j < n; j++) {
+                counter = {{0,1}};
+                int cur = 0;
+                for (int k = 0; k < m; k++) {
+                    cur += A[k][j] - (i > 0 ? A[k][i - 1] : 0);
+                    res += counter.find(cur - target) != counter.end() ? counter[cur - target] : 0;
+                    counter[cur]++;
+                }
             }
         }
-        return result;
+        return res;
     }
 };
