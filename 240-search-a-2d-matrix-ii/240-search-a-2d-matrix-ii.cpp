@@ -2,9 +2,9 @@ class Solution {
 public:
     bool searchMatrix(vector<vector<int>>& matrix, int target) {
         
-        // if( matrix.size() < 1 || matrix[0].size() <1) {
-        //     return false;
-        // }
+        if( matrix.size() < 1 || matrix[0].size() <1) {
+            return false;
+        }
         
         int col = matrix[0].size()-1;
         int row = 0;
