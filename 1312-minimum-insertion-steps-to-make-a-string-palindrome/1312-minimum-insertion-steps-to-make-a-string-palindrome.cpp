@@ -25,21 +25,21 @@ public:
         for(int i=n-1 ; i>=0 ;i--)
             s2 += s1[i];
             
-        vector<vector<int>> dp(n + 1 ,vector<int>(n+1,-1));
+        vector<int> prev(n+1,0) , cur(n+1,0);
         
-        for(int i=0 ; i<=n ; i++)dp[i][0] = 0;
-        for(int j=0 ; j<=n ; j++)dp[0][j] = 0;
+        for(int i=0 ; i<=n ; i++) prev[0] = 0;
         
         for(int i=1 ; i<=n ; i++)
         {
             for(int j=1 ; j<=n ; j++)
             {
                 if(s1[i-1] == s2[j-1])
-                    dp[i][j] = 1 + dp[i-1][j-1];
+                    cur[j] = 1 + prev[j-1];
                 else 
-                    dp[i][j] = max(dp[i-1][j] , dp[i][j-1]);
+                    cur[j] = max(prev[j] , cur[j-1]);
             }
+            prev = cur;
         }
-        return n - dp[n][n];
+        return n - prev[n];
     }
 };
