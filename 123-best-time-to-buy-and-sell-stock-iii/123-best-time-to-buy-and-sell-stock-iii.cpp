@@ -23,21 +23,22 @@ public:
         
         int n = prices.size();
         
-        vector<vector<int>> dp(n+1 , vector<int>(5,0));
+        vector<int>  after(5,0) , cur(5,0);
         
         for(int index = n-1 ; index >= 0 ; index--)
         {
             for(int transactionNo = 0 ; transactionNo < 4 ; transactionNo++)
             {
                 if(transactionNo % 2 == 0)
-                    dp[index][transactionNo] = max(-prices[index] + dp[index+1][transactionNo+1] ,
-                                                         0        + dp[index+1][transactionNo]);
+                    cur[transactionNo] = max(-prices[index] + after[transactionNo+1] ,
+                                                         0        + after[transactionNo]);
                 else
-                    dp[index][transactionNo] = max(prices[index] + dp[index+1][transactionNo+1] ,
-                                                         0       + dp[index+1][transactionNo]);
+                    cur[transactionNo] = max(prices[index] + after[transactionNo+1] ,
+                                                         0       + after[transactionNo]);
             }
+            after = cur;
         }
         
-        return dp[0][0];
+        return after[0];
     }
 };
