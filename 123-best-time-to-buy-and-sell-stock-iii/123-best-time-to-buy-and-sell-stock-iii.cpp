@@ -1,38 +1,30 @@
 class Solution {
 public:
     
+    int fun(int index , int  transactionNo , int n , vector<int> &prices , vector<vector<int>> &dp)
+    {
+        if(index == n || transactionNo == 4) return 0;
+        
+        if(dp[index][transactionNo] != -1)return dp[index][transactionNo];
+        
+        if(transactionNo % 2 == 0) 
+        {
+            return dp[index][transactionNo] = max(-prices[index] + fun(index+1 , transactionNo+1 , n , prices ,dp) ,
+                                0     + fun(index+1 , transactionNo , n , prices,dp));
+        }
+        else
+        { 
+            return dp[index][transactionNo] = max(prices[index] + fun(index+1 , transactionNo+1 , n , prices,dp), 
+                                 0   + fun(index+1 , transactionNo , n , prices ,dp));
+        }
+    }
+    
     int maxProfit(vector<int>& prices) {
         
         int n = prices.size();
         
+        vector<vector<int>> dp(n , vector<int>(4,-1));
         
-        vector<vector<int>> after(2 , vector<int>(3 , 0));
-        vector<vector<int>> cur(2 , vector<int>(3 , 0));
-
-        
-        for(int index = n-1 ; index >= 0 ; index--)
-        {
-            for(int buy = 0 ; buy <= 1 ; buy++)
-            {
-                for(int rem = 1 ; rem <= 2 ; rem++)
-                {
-                    if(buy)
-                    {
-                        cur[buy][rem] = max(-prices[index] + after[0][rem] ,
-                                                           0     + after[1][rem]);
-                    }
-                    else
-                    {
-                        cur[buy][rem] = max(prices[index] + after[1][rem-1] ,
-                                                            0   + after[0][rem]);
-                    }
-                }
-            }
-            after = cur;
-        }
-        
-        
-        
-        return after[1][2];
+        return fun(0 , 0 , n , prices ,dp);
     }
 };
