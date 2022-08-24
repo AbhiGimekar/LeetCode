@@ -21,20 +21,21 @@ public:
         int n = satisfaction.size();
         sort(satisfaction.begin() , satisfaction.end());
         
-        vector<vector<int>> dp(n+1 , vector<int>(n+2,0));
+        vector<int> next(n+2 , 0) , cur(n+2 , 0);
         
         for(int index = n-1 ; index >= 0 ; index--)
         {
             for(int no = 1 ; no <= n ; no++)
             {
-                int notTake = 0 + dp[index+1][no];
-                int take = no*satisfaction[index] + dp[index+1][no+1];
+                int notTake = 0 + next[no];
+                int take = no*satisfaction[index] + next[no+1];
 
-                dp[index][no] = max(notTake , take);
+                cur[no] = max(notTake , take);
             }
+            next = cur;
         }
         
-        return dp[0][1];
+        return next[1];
         
     }
 };
