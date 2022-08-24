@@ -21,9 +21,20 @@ public:
         int n = satisfaction.size();
         sort(satisfaction.begin() , satisfaction.end());
         
-        vector<vector<int>> dp(n , vector<int>(n+1,-1));
+        vector<vector<int>> dp(n+1 , vector<int>(n+2,0));
         
-        return fun(0 , 1 , n , satisfaction , dp);
+        for(int index = n-1 ; index >= 0 ; index--)
+        {
+            for(int no = 1 ; no <= n ; no++)
+            {
+                int notTake = 0 + dp[index+1][no];
+                int take = no*satisfaction[index] + dp[index+1][no+1];
+
+                dp[index][no] = max(notTake , take);
+            }
+        }
+        
+        return dp[0][1];
         
     }
 };
