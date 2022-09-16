@@ -22,19 +22,21 @@ public:
         int m = multipliers.size();
         
         vector<vector<int>> dp(m+1 , vector<int>(m+1 , 0));
+        vector<int> after(m+1 , 0) , cur(m+1 , 0);
         
         for(int j = m-1 ; j>=0 ; j--)
         {
             for(int left = j ; left>=0 ; left--)
             {
-                int leftMul = (nums[left]*multipliers[j]) +  dp[j+1][left+1];
+                int leftMul = (nums[left]*multipliers[j]) +  after[left+1];
         
-                int rightMul = (nums[(n-1) - (j-left)]*multipliers[j]) + dp[j+1][left] ;
+                int rightMul = (nums[(n-1) - (j-left)]*multipliers[j]) + after[left] ;
         
-                dp[j][left] = max(leftMul , rightMul);
+                cur[left] = max(leftMul , rightMul);
             }
+            after = cur;
         }
         
-        return dp[0][0];
+        return after[0];
     }
 };
