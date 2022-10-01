@@ -17,7 +17,25 @@ public:
     int numDecodings(string s) {
         
         int n = s.size();
-        vector<int> dp(n+1 , -1);
-        return fun(0 , s , n , dp);
+        vector<int> dp(n+1 , 0);
+        
+        dp[n] = 1;
+        
+        for(int ind = n-1 ; ind>=0 ; ind--)
+        {   
+            if(s[ind] == '0')
+                dp[ind] = 0;
+            else
+            {
+                int ans = dp[ind+1];
+                if(ind < n-1 && (s[ind] == '1' || (s[ind] == '2' && s[ind+1] < '7')))
+                    ans += dp[ind+2];
+
+                dp[ind] = ans;
+            }
+            
+        }
+        
+        return dp[0];
     }
 };
