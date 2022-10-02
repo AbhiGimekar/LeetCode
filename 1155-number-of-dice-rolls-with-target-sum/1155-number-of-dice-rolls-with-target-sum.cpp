@@ -22,7 +22,22 @@ public:
     
     int numRollsToTarget(int n, int k, int target) {
         
-        vector<vector<long long >> dp(n+1 , vector<long long>(target+1 , -1));
-        return fun(n , k , target , dp);
+        vector<vector<long long >> dp(n+1 , vector<long long>(target+1 , 0));
+        
+        dp[0][0] = 1;
+        
+        for(int i = 1 ; i<=n ; i++)
+        {
+            for(int  j = 1 ; j<=target ; j++)
+            {
+                int ans = 0;
+                for(int ind = 1 ; ind<=k ; ind++){
+                    dp[i][j] = (dp[i][j] + (ind<=j ? dp[i-1][j-ind] : 0));
+                    dp[i][j] %= mod;
+                }
+            }
+        }
+        
+        return dp[n][target];
     }
 };
