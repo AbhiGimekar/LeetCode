@@ -1,5 +1,5 @@
 class LUPrefix {
-    unordered_set<int>s;
+    set<int>s;
     int last=0;
 public:
     LUPrefix(int n) {
