@@ -1,5 +1,5 @@
 class TimeMap {
-    unordered_map<string , unordered_map<int , string>> keyTimeMap;
+    unordered_map<string, map<int, string>> keyTimeMap;
 public:
     TimeMap() {
         
@@ -11,16 +11,17 @@ public:
     
     string get(string key, int timestamp) {
         
-        if(!keyTimeMap.count(key))
+        if (keyTimeMap.find(key) == keyTimeMap.end()) {
             return "";
-        
-        for(int curTime = timestamp ; curTime>=1 ; curTime--)
-        {
-            if(keyTimeMap[key].count(curTime))
-                return keyTimeMap[key][curTime];
         }
         
-        return "";
+        auto it = keyTimeMap[key].upper_bound(timestamp);
+        
+        if (it == keyTimeMap[key].begin()) {
+            return "";
+        }
+        
+        return prev(it)->second;
     }
 };
 
