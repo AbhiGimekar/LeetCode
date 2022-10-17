@@ -2,15 +2,16 @@ class Solution {
 public:
     bool checkIfPangram(string sentence) {
         
-        int cnt[26] = {0};
+        int num = 0;
         
-        for(auto i:sentence)cnt[i-'a']++;
-        
-        for(int i=0 ;  i<26 ; i++)
+        for(auto i:sentence)
         {
-            if(cnt[i] == 0)return false;
+            int index = i - 'a';
+            int curBit = 1 << index;
+            
+            num |= curBit;
         }
         
-        return true;
+        return num ==(1<<26)-1;
     }
 };
