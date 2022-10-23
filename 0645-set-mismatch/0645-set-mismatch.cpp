@@ -2,21 +2,23 @@ class Solution {
 public:
     vector<int> findErrorNums(vector<int>& nums) {
         
-        int dup = -1, missing = 1;
-        vector<int> mp(nums.size()+1,0);
+        // let m = missing , d = duplicate
+        // diff = m - d
+        // squareDiff = m*m - d*d
+        // sum = m+d ==> squareDiff/diff
+        //           ==> (m+d)(m-d)/(m-d)
+        //      sum  ==> (m+d)
+        // m = (sum+diff)/2
+        // d = (sum-diff)/2
         
-        for(auto i:nums)mp[i]++;
-        
-        for(int i=0 ; i<=nums.size(); i++)
+        long long diff = 0 , squareDiff = 0;
+        for(int i=0 ; i<nums.size(); i++)
         {
-            if(mp[i] == 0)
-                missing = i;
-            else if(mp[i] == 2)
-                dup = i;
+            diff += (i+1) - nums[i];
+            squareDiff += (i+1)*(i+1) - nums[i]*nums[i];
         }
         
-        return {dup,missing};
-        
-                
+        int sum = squareDiff/diff;
+        return {int((sum-diff)/2) , int((sum+diff)/2)};    
     }
 };
