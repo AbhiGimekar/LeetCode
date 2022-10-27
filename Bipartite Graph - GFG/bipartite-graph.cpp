@@ -27,6 +27,20 @@ class Solution {
         return true;
     }
     
+    bool dfs(int node, int col, vector<int> adj[] , int color[])
+    {
+        color[node] = col;
+        
+        for(auto i:adj[node]){
+            if(color[i] == -1){
+                if(dfs(i, !col, adj, color) == false)return false;
+            }
+            else if(color[i] == color[node])
+                return false;
+        }
+        return true;
+    }
+    
 public:
 	bool isBipartite(int V, vector<int>adj[]){
 	    // Code here
@@ -35,7 +49,9 @@ public:
 	    
 	    for(int i=0; i<V;  i++){
 	        if(color[i] == -1){
-	            if(check(i, V, adj, color) == false)
+	           // if(check(i, V, adj, color) == false)
+	           //     return false;
+	           if(dfs(i, 0, adj, color) == false)
 	                return false;
 	        }
 	    }
