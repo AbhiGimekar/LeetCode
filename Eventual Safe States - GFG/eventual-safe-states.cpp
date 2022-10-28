@@ -37,23 +37,39 @@ class Solution {
   public:
     vector<int> eventualSafeNodes(int V, vector<int> adj[]) {
         // code here
-        int vis[V] = {0};
-        int pathVis[V] = {0};
-        int check[V] = {0};
-        
-        vector<int> safeNodes;
+        vector<int> adjRev[V];
+        int inDegree[V] = {0};
         
         for(int i=0; i<V; i++){
-            if(!vis[i]){
-                dfs(i, adj, vis, pathVis, check);
+            // i --> j 
+            for(auto j:adj[i]){
+                adjRev[j].push_back(i);
+                inDegree[i]++;
             }
         }
         
-        for(int i=0; i<V; i++){
-            if(check[i])
-                safeNodes.push_back(i);
+        queue<int> q;
+        
+        for(int i=0; i<V; i++)
+            if(inDegree[i] == 0)
+                q.push(i);
+        
+        
+        vector<int> safeNodes;
+        
+        while(!q.empty())
+        {
+            int node = q.front();
+            q.pop();
+            safeNodes.push_back(node);
+            
+            for(auto i:adjRev[node]){
+                inDegree[i]--;
+                if(inDegree[i] == 0) q.push(i);
+            }
         }
         
+        sort(begin(safeNodes), end(safeNodes));
         return safeNodes;
     }
 };
