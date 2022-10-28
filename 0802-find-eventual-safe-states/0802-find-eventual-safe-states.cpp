@@ -28,25 +28,39 @@ public:
     vector<int> eventualSafeNodes(vector<vector<int>>& graph) {
         
         int V = graph.size();
-        int vis[V] , pathVis[V], check[V];
-        for(int i=0; i<V; i++){
-            vis[i] = 0;
-            pathVis[i] = 0;
-            check[i] = 0;
-        }
+        vector<vector<int>> adj(V);
+        vector<int> inDegree(V,0);
         
         for(int i=0; i<V; i++){
-            if(!vis[i]){
-                dfs(i, graph, vis, pathVis, check);
+            for(auto j:graph[i])
+            {
+                adj[j].push_back(i);
+                inDegree[i]++;
             }
         }
         
-        vector<int> safeNodes;
+        queue<int> q;
         for(int i=0; i<V; i++){
-            if(check[i])
-                safeNodes.push_back(i);
+            if(inDegree[i] == 0)
+                q.push(i);
         }
         
+        vector<int> safeNodes;
+        while(!q.empty())
+        {
+            int node = q.front();
+            q.pop();
+            safeNodes.push_back(node);
+            
+            for(auto i:adj[node])
+            {
+                inDegree[i]--;
+                if(inDegree[i] == 0)
+                    q.push(i);
+            }
+        }
+        
+        sort(begin(safeNodes), end(safeNodes));
         return safeNodes;
     }
 };
