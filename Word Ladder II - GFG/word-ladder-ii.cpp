@@ -27,6 +27,7 @@ public:
                 level++;
                 for(auto it:usedOnLevel)
                     st.erase(it);
+                usedOnLevel.clear();
             }
             
             string word = vec.back();
