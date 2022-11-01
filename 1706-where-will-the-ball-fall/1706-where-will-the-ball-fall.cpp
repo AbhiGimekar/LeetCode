@@ -1,26 +1,30 @@
 class Solution {
 public:
-    
-    int finalBallDropColumn(int row, int col, vector<vector<int>> &grid)
-    {
-        if(row == grid.size())
-            return col;
-        
-        int nextCol = col + grid[row][col];
-        if(nextCol < 0 || nextCol > grid[0].size()-1 || 
-            grid[row][col] != grid[row][nextCol])
-            return -1;
-        
-        return finalBallDropColumn(row+1, nextCol, grid);
-    }
-    
     vector<int> findBall(vector<vector<int>>& grid) {
         
-        int n = grid[0].size();
-        vector<int> ans(n,0);
+        int n = grid.size();
+        int m = grid[0].size();
         
-        for(int i=0; i<n ; i++)
-            ans[i] = finalBallDropColumn(0, i, grid);
+        vector<int> ans(m,0);
+        vector<vector<int>> dp(n+1, vector<int>(m,-1));
+        
+        for(int row=n; row>=0; row--){
+            for(int col=0; col<m; col++){
+                if(row == n){
+                    dp[row][col] = col;
+                    continue;
+                }
+                
+                int nextCol = col + grid[row][col];
+                if(nextCol < 0 || nextCol > m-1 || grid[row][col] != grid[row][nextCol])
+                    dp[row][col] = -1;
+                else
+                    dp[row][col] = dp[row+1][nextCol];
+                
+                if(row == 0)
+                    ans[col] = dp[row][col];
+            }
+        }
         
         return ans;
     }
