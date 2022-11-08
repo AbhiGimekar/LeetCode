@@ -6,48 +6,89 @@ using namespace std;
 // } Driver Code Ends
 //User function Template for C++
 
-class Solution {
-    void dfs(int node , vector<int> adjList[] , int vis[])
+class DisjointSet
+{
+public:
+    vector<int> rank, parent, size;
+    DisjointSet(int n)
     {
-        vis[node] = 1;
-        for(auto  i:adjList[node])
-        {   
-            if(!vis[i])
-                dfs(i , adjList , vis);
+        rank.resize(n + 1, 0);
+        parent.resize(n + 1);
+        size.resize(n + 1);
+        for (int i = 0; i <= n; i++)
+        {
+            parent[i] = i;
+            size[i] = 1;
         }
     }
-    
-    
+
+    int findParent(int node)
+    {
+        if (node == parent[node])
+        {
+            return node;
+        }
+        return parent[node] = findParent(parent[node]);
+    }
+
+    void unionByRank(int u, int v)
+    {
+        int ultimateParent_u = findParent(u);
+        int ultimateParent_v = findParent(v);
+
+        if (ultimateParent_u == ultimateParent_v)
+            return;
+        else if (rank[ultimateParent_u] < rank[ultimateParent_v])
+            parent[ultimateParent_u] = ultimateParent_v;
+        else if (rank[ultimateParent_v] < rank[ultimateParent_u])
+            parent[ultimateParent_v] = ultimateParent_u;
+        else
+        {
+            parent[ultimateParent_u] = ultimateParent_v;
+            rank[ultimateParent_u]++;
+        }
+    }
+
+    void unionBySize(int u, int v)
+    {
+        int ultimateParent_u = findParent(u);
+        int ultimateParent_v = findParent(v);
+
+        if (ultimateParent_u == ultimateParent_v)
+            return;
+        else if (size[ultimateParent_u] < size[ultimateParent_v])
+        {
+            parent[ultimateParent_u] = ultimateParent_v;
+            size[ultimateParent_v] += size[ultimateParent_u];
+        }
+        else
+        {
+            parent[ultimateParent_v] = ultimateParent_u;
+            size[ultimateParent_u] += size[ultimateParent_v];
+        }
+    }
+};
+
+class Solution {
   public:
     int numProvinces(vector<vector<int>> adj, int V) {
         // code here
-        vector<int> adjList[V];
-        for(int i=0; i<V ; i++)
-        {
-            for(int j=0; j<V; j++)
-            {
-                if(adj[i][j] == 1 && i != j)
-                {
-                    adjList[i].push_back(j);
-                    adjList[j].push_back(i);
-                }
+        DisjointSet ds(V);
+        for(int i=0; i<V; i++){
+            for(int j=0; j<V; j++){
+                if(adj[i][j] == 1)
+                    ds.unionBySize(i,j);
             }
         }
         
-        int vis[V] = {0};
-        int cnt = 0;
-        
-        for(int v = 0 ; v<V ; v++)
-        {
-            if(vis[v] == 0)
-            {
+        int cnt=0;
+        for(int i=0; i<V; i++){
+            if(ds.parent[i] == i)
                 cnt++;
-                dfs(v , adjList , vis);
-            }
         }
-        
         return cnt;
     }
+    
 };
 
 //{ Driver Code Starts.
